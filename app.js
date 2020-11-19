@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const { pool } = require('./config')
+const {  broadcast } = require('./wsConfig')
 
 const app = express()
 app.use(bodyParser.json())
@@ -26,6 +27,12 @@ const addBook = (request, response) => {
     if (error) {
       throw error
     }
+    // wss.clients.forEach(client => {
+    //   if (client.readyState === WebSocket.OPEN) {
+    //     client.send(JSON.stringify({message: `You created a book!!!`}))
+    //   }
+    // })
+    broadcast({message: `You created a book!!!`})
     response.status(201).json({ status: 'success', message: 'Yay! Your book was added to the database...' })
   })
 }
